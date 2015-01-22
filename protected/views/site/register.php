@@ -30,7 +30,6 @@ $form=$this->beginWidget('CActiveForm');
 <?php $this->widget('CCaptcha'); ?>    
 <?php echo $form->textField($model,'verifyCode'); ?>
 <div class="hint">请输入上图看到的验证码。<br/>字母不区分大小写。</div>    
-<?php echo $form->textField($model,'verifyCode');?>  
 <?php echo $form->error($model,'verifyCode');?>   
 <br />   
 <!--提交-->  

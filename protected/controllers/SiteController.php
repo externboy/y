@@ -118,9 +118,6 @@ class SiteController extends Controller
              //   $_POST['User']['hobby']=  implode(",", $_POST['User']['hobby']);  
             //print_r($_POST['User']);  
             $user->attributes=$_POST['Users']; 
-            if($user->registerRules()){
-            	
-            } 
             if($user->save()){  
                 echo 'success';  
             }else{  

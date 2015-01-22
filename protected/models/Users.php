@@ -51,27 +51,31 @@ class Users extends CActiveRecord
 	{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
-		return array(
-			array('password, account_name', 'required','message'=>'不能为空'),
+		return [
+			['password, account_name,verifyCode,password2', 'required','message'=>'不能为空'],
 		//	array('sex, level, score, zone_id, apply_zone_id, status, has_withdraw, has_deposit, update_admin_id, create_admin_id', 'numerical', 'integerOnly'=>true),
-			array('account_name, name', 'length', 'max'=>30),
-			array('password', 'length', 'max'=>32),
-			array('activity_id, apply_activity_id', 'length', 'max'=>11),
-			array('agent_code, total_balance, frozen_balance', 'length', 'max'=>10),
-			array('agent_tree, email', 'length', 'max'=>50),
-			array('register_time, create_time', 'safe'),
+			['account_name', 'length', 'max'=>30,'min'=>3,'message'=>'用户名3-30个字符'],
+			['name','length','max'=>10,'min'=>'2','message'=>'用户名称3-10个字符'],
+			['password,password2', 'length', 'max'=>32,'min'=>8,'tooLong'=>'密码请输入长度为8-30位字符', 'tooShort'=>'密码请输入长度为8-30位字符'],
+			['password2', 'compare', 'compareAttribute'=>'password', 'message'=>'请再输入确认密码'],
+			['password','match','pattern'=>'/^(?![^a-zA-Z]+$)(?!\D+$).{8,30}$/','message'=>'密码必须同时包含字母和数字'],
+			['activity_id, apply_activity_id', 'length', 'max'=>11],
+			['email','email','message'=>'邮箱格式有误'],
+			['agent_code, total_balance, frozen_balance', 'length', 'max'=>10],
+			['agent_tree, email', 'length', 'max'=>50],
+			['register_time, create_time', 'safe'],
+			['register_time,create_time','date','format'=>'yyyy-MM-dd'],
+			['verifyCode','captcha'],
+			["password2","compatePassword"],
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			//array('id, account_name, name, password, sex, level, score, activity_id, apply_activity_id, zone_id, apply_zone_id, agent_code, agent_tree, total_balance, frozen_balance, status, has_withdraw, has_deposit, register_time, update_admin_id, update_time, create_admin_id, create_time, email', 'safe', 'on'=>'search'),
-		);
-	}
-	public function registerRules()
-	{
-		return [
-			['verifyCode,password2','required'],
-			['verifyCode','captcha',],
-			['password2','length','max'=>32],
 		];
+	}
+	public function compatePassword()
+	{
+		if(trim($this->password2) !== trim($this->password))
+			$this->addError('password2', '重复密码不相同');
 	}
 
 	/**
