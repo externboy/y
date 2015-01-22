@@ -106,4 +106,49 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+	
+	public function actionRegister()
+	{
+		$user=new Users();  
+        if(isset($_POST['Users'])){  
+//            foreach ($_POST['User'] as $k =>$v){  
+//                $user->$k=$v;  
+//            }  
+           // if(is_array($_POST['User']['hobby']))  
+             //   $_POST['User']['hobby']=  implode(",", $_POST['User']['hobby']);  
+            //print_r($_POST['User']);  
+            $user->attributes=$_POST['Users']; 
+            if($user->registerRules()){
+            	
+            } 
+            if($user->save()){  
+                echo 'success';  
+            }else{  
+                echo 'error';  
+            }  
+        }  
+        $this->render("register",array("model"=>$user));  
+	}
+	
+	//定义操作权限
+	public function accessRules()
+	{
+		return array(
+				array('allow',  // 所有用户有操作权限：index,view,captcha
+						'actions'=>array('index','view','captcha'),
+						'users'=>array('*'),
+				),
+				array('allow', // 仅登录用户有权限操作：create,update
+						'actions'=>array('create','update'),
+						'users'=>array('@'),
+				),
+				array('allow', // 指定用户有权限操作：admin,delete
+						'actions'=>array('admin','delete'),
+						'users'=>array('admin'),
+				),
+				array('deny',  // 禁止所有用户操作
+						'users'=>array('*'),
+				),
+		);
+	}
 }
