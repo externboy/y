@@ -39,7 +39,8 @@ return array(
 
 		// uncomment the following to enable URLs in path-format
 		'urlManager'=>array(
-			'urlFormat'=>'path',
+			'urlFormat'=>'path',  //yii1
+			//'enablePrettyUrl' => true,   @TODO yii 2开启pathinfo
 			'showScriptName' => false,
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
